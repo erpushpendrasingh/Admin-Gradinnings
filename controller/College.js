@@ -199,7 +199,12 @@ const addScrapedDataToMongoDB = async (req, res) => {
    Award: awardsRecognitionCollaborations,
    Seat: seat,
   };
-
+  console.log("coursesarray:", universitySchema.coursesarray);
+  console.log("city:", city);
+  console.log("state:", state);
+  console.log("fee:", fee);
+  // console.log("Banner:", Banner);
+  // console.log("Logo:", Logo);
   const newCollege = new College(universitySchema);
   await newCollege.save();
 

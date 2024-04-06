@@ -15,7 +15,7 @@ function DataForm() {
   overview: "",
   tables: [{ category1: [] }, { category2: [] }],
  });
- const [coursesArray, setCoursesArray] = useState([]);
+ const [coursesarray, setCoursesArray] = useState([]);
  const [city, setCity] = useState("");
  const [state, setState] = useState("");
  const [fee, setFee] = useState("");
@@ -52,7 +52,7 @@ function DataForm() {
    placement: placement,
    campusAndInfrastructure: campusAndInfrastructure,
    cutOff: cutOff,
-   coursesArray: coursesArray,
+   coursesarray: coursesarray,
    city: city,
    state: state,
    fee: fee,
@@ -217,11 +217,11 @@ function DataForm() {
 
     {/* Other Information */}
     <h2>Other Information</h2>
-    <label htmlFor="coursesArray">Courses Array:</label>
+    <label htmlFor="coursesarray">Courses Array:</label>
     <Input
-     id="coursesArray"
+     id="coursesarray"
      type="text"
-     value={coursesArray}
+     value={coursesarray}
      onChange={(e) => setCoursesArray(e.target.value.split(","))}
     />
     <label htmlFor="city">City:</label>
