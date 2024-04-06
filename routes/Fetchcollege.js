@@ -1,22 +1,18 @@
 const express = require("express");
 const College = require("../models/Collegemodel");
 const router = express.Router();
-// Import your College model
 
-// Define a route to get scraped data
-// Define a route to get scraped data filtered by city
 router.get("/colleges", async (req, res) => {
  try {
-  // const city = "Delhi"; // Extract city from query parameters
+  const city = "Delhi"; // Extract city from query parameters
 
   // Check if city is provided
-  // if (!city) {
-  //   return res.status(400).json({ error: "City parameter is missing" });
-  // }
+  if (!city) {
+   return res.status(400).json({ error: "City parameter is missing" });
+  }
 
   // Fetch colleges from the database based on the city
-  const colleges = await College.find();
-  // const colleges = await College.find({ city: city });
+  const colleges = await College.find({ city: city });
 
   // Check if colleges exist
   if (!colleges || colleges.length === 0) {
@@ -32,6 +28,63 @@ router.get("/colleges", async (req, res) => {
   res.status(500).send("Internal Server Error");
  }
 });
+router.get("/all-colleges", async (req, res) => {
+ const page = parseInt(req.query.page) || 1; // Default page number is 1
+ const limit = parseInt(req.query.limit) || 10; // Default limit is 10
+
+ try {
+  let query = College.find();
+  let totalCount;
+
+  // Check if page and limit parameters are provided
+  if (req.query.page && req.query.limit) {
+   query = query.skip((page - 1) * limit).limit(limit);
+   totalCount = await College.countDocuments();
+  } else {
+   totalCount = await College.countDocuments();
+  }
+
+  const colleges = await query;
+
+  res.json({
+   total: totalCount,
+   page: page,
+   limit: limit,
+   colleges: colleges,
+  });
+ } catch (error) {
+  res.status(500).json({ message: error.message });
+ }
+});
+// router.get("/all-colleges", async (req, res) => {
+//  const page = parseInt(req.query.page) || 1; // Default page number is 1
+//  const limit = parseInt(req.query.limit) || 10; // Default limit is 10
+
+//  try {
+//   let colleges, totalCount;
+
+//   // Check if page and limit parameters are provided
+//   if (req.query.page && req.query.limit) {
+//    colleges = await College.find()
+//     .skip((page - 1) * limit)
+//     .limit(limit);
+
+//    totalCount = await College.countDocuments(); // Count total number of documents
+//   } else {
+//    colleges = await College.find(); // Retrieve all data
+//    totalCount = colleges.length; // Total count is the length of retrieved data
+//   }
+
+//   res.json({
+//    total: totalCount,
+//    page: page,
+//    limit: limit,
+//    colleges: colleges,
+//   });
+//  } catch (error) {
+//   res.status(500).json({ message: error.message });
+//  }
+// });
 
 // Export the router
 module.exports = router;
